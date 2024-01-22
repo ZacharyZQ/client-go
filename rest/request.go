@@ -619,6 +619,8 @@ func (r *Request) tryThrottleWithInfo(ctx context.Context, retryInfo string) err
 	}
 	latency := time.Since(now)
 
+    extraMessage2 := fmt.Sprintf("request: %s:%s, throttle %v", r.verb, r.URL().String(), latency)
+    klog.V(3).Info(extraMessage2)
 	var message string
 	switch {
 	case len(retryInfo) > 0:
