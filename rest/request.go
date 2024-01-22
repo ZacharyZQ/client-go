@@ -33,6 +33,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+    "runtime/debug"
 
 	"golang.org/x/net/http2"
 
@@ -613,6 +614,8 @@ func (r *Request) tryThrottleWithInfo(ctx context.Context, retryInfo string) err
 
     extraMessage := fmt.Sprintf("request: %s:%s, before throttle", r.verb, r.URL().String())
     klog.V(3).Info(extraMessage)
+    log.InfoS("Current stack trace", "stacktrace", string(debug.Stack()))
+
 	err := r.rateLimiter.Wait(ctx)
 	if err != nil {
 		err = fmt.Errorf("client rate limiter Wait returned an error: %w", err)
