@@ -614,7 +614,9 @@ func (r *Request) tryThrottleWithInfo(ctx context.Context, retryInfo string) err
 
     extraMessage := fmt.Sprintf("request: %s:%s, before throttle", r.verb, r.URL().String())
     klog.V(3).Info(extraMessage)
-    klog.V(3).InfoS("Current stack trace", "stacktrace", string(debug.Stack()))
+
+    bt := strings.ReplaceAll(string(debug.Stack()), "\n", " ")
+    klog.V(3).InfoS("Current stack trace", "stacktrace", bt)
 
 	err := r.rateLimiter.Wait(ctx)
 	if err != nil {
